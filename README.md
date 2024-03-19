@@ -9,4 +9,8 @@ Tested on both Windows 10 and Windows 11.
 
 # Video Tutorial
 
+<p align="center">
+  <img src="preview.jpg" alt="" width="800">
+</p>
+
 </p>
