@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include <raylib.h>
-
+#include <cmath>
 using namespace std;
 
 class Ball
@@ -27,7 +27,7 @@ public:
         DrawCircle(x, y, radius, WHITE);
     }
 
-    void Update()
+    void Move()
     {
         x += speed_x;
         y += speed_y;
@@ -47,22 +47,15 @@ class Paddle
 {
 public:
     float x, y;
-    int speed;
     int width, height;
-    Paddle(int x, int y)
-    {
-        this->x = x;
-        this->y = y;
-        speed = 5;
-        width = 20;
-        height = 100;
-    }
+    int speed;
+
     void Draw()
     {
         DrawRectangle(x, y, width, height, WHITE);
     }
 
-    void Move(int direction)
+    void Move()
     {
         if (IsKeyDown(KEY_UP))
         {
@@ -74,6 +67,7 @@ public:
         }
     }
 };
+
 Ball ball;
 Paddle player;
 
@@ -98,15 +92,19 @@ int main()
     player.y = screenHeight / 2 - player.height / 2;
     player.speed = 5;
 
-    while (WindowShouldClose() == false)
+    while (!WindowShouldClose())
     {
         BeginDrawing();
-        ball.Update();
-        // Goal and line
+
+        // Move
+        ball.Move();
+        player.Move(); // Corrected from player.Update()
+
         ClearBackground(BLACK);
-        ball.Draw();
         DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, WHITE);
         DrawRectangle(10, screenHeight / 2 - 60, 25, 120, WHITE);
+
+        ball.Draw();
         player.Draw();
 
         EndDrawing();
