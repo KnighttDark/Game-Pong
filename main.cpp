@@ -94,6 +94,9 @@ Ball ball;
 Paddle player;
 ComputerPaddle computer;
 
+int playerScore = 0;
+int computerScore = 0;
+
 int main()
 {
 
@@ -132,10 +135,37 @@ int main()
         player.Move(); // Corrected from player.Update()
         computer.Move(ball.y);
 
+        // Check collision with player paddle
+        if (CheckCollisionCircleRec({ball.x, ball.y}, ball.radius, {player.x, player.y, player.width, player.height}))
+        {
+            ball.speed_x = -ball.speed_x;
+        }
+
+        // Check collision with computer paddle
+        if (CheckCollisionCircleRec({ball.x, ball.y}, ball.radius, {computer.x, computer.y, computer.width, computer.height}))
+        {
+            ball.speed_x = -ball.speed_x;
+        }
+
         ClearBackground(Dark_Green);
         DrawCircle(screenWidth / 2, screenHeight / 2, 100, Light_Green);
         DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, WHITE);
 
+        // Check score
+        if (ball.x <= 0)
+        {
+            computerScore++;
+            ball.x = screenWidth / 2;
+            ball.y = screenHeight / 2;
+        }
+        else if (ball.x >= screenWidth)
+        {
+            playerScore++;
+            ball.x = screenWidth / 2;
+            ball.y = screenHeight / 2;
+        }
+        DrawText(to_string(playerScore).c_str(), screenWidth / 2 + 50, 20, 20, WHITE);
+        DrawText(to_string(computerScore).c_str(), screenWidth / 2 - 50, 20, 20, WHITE);
         // Draw
         ball.Draw();
         player.Draw();
