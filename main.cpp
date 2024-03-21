@@ -15,6 +15,11 @@
 #include <cmath>
 using namespace std;
 
+Color Green = Color{38, 185, 154, 255};
+Color Dark_Green = Color{20, 160, 133, 255};
+Color Light_Green = Color{129, 204, 184, 255};
+Color Yellow = Color{243, 213, 91, 255};
+
 class Ball
 {
 public:
@@ -68,8 +73,26 @@ public:
     }
 };
 
+class ComputerPaddle : public Paddle
+{
+public:
+    void Move(int ball_y)
+    {
+        if (y + height / 2 > ball_y)
+        {
+            y -= speed;
+        }
+
+        if (y + height / 2 < ball_y)
+        {
+            y += speed;
+        }
+    }
+};
+
 Ball ball;
 Paddle player;
+ComputerPaddle computer;
 
 int main()
 {
@@ -92,6 +115,14 @@ int main()
     player.y = screenHeight / 2 - player.height / 2;
     player.speed = 5;
 
+    // ComputerPaddle
+
+    computer.height = 100;
+    computer.width = 20;
+    computer.x = 10;
+    computer.y = screenHeight / 2 - computer.height / 2;
+    computer.speed = 5;
+
     while (!WindowShouldClose())
     {
         BeginDrawing();
@@ -99,13 +130,16 @@ int main()
         // Move
         ball.Move();
         player.Move(); // Corrected from player.Update()
+        computer.Move(ball.y);
 
-        ClearBackground(BLACK);
+        ClearBackground(Dark_Green);
+        DrawCircle(screenWidth / 2, screenHeight / 2, 100, Light_Green);
         DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, WHITE);
-        DrawRectangle(10, screenHeight / 2 - 60, 25, 120, WHITE);
 
+        // Draw
         ball.Draw();
         player.Draw();
+        computer.Draw();
 
         EndDrawing();
     }
